@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 
 	// Read the input image and run the algorithm
 	cv::UMat in(cv::imread("resources/demo.png").getUMat(cv::ACCESS_READ));
-	depthEstimator.setImage(in.clone());
+	depthEstimator.setFrame(in.clone());
 
 	cv::imshow("Restored", depthEstimator.getReconsImg());
 	cv::imshow("Input", in);
