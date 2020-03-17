@@ -99,7 +99,7 @@ DepthEstimator::DepthEstimator(cv::UMat const & tformInd, cv::UMat const & invIn
 	m_edges1Conf = cv::UMat::zeros(m_invIndMask1.size(), CV_8UC3);
 	m_edges2Conf = cv::UMat::zeros(m_invIndMask1.size(), CV_8UC3);
 	m_edgesGreyConf = cv::UMat::zeros(m_invIndMask1.size(), CV_8UC1);
-	m_ConfHandle = cv::UMat::zeros(m_invIndMask1.size(), CV_8UC1);
+	m_handle = cv::UMat::zeros(m_invIndMask1.size(), CV_8UC1);
 	m_maskConfidence = cv::UMat::zeros(m_invIndMask1.size(), CV_8UC1);
 
 	/// Bilateral filter with confidence map
@@ -259,20 +259,19 @@ void DepthEstimator::maskDisparityMap()
 	cv::subtract(m_confidence, m_minCostConf, m_minCostConf);
 	cv::compare(m_minCostConf, m_threshCost, m_maskConfidence, cv::CMP_LE);
 
-	// Map displacement to account for the position of the artefacts 
-	// when the image is reconstructed with a wrong depth candidate
-	int displacement = int(float(m_winSize * m_fullDisparityMapConf.cols) / (m_fullDisparityMap.cols  * 2));
-	m_fullDisparityMapConf.copyTo(m_ConfHandle);
-	m_ConfHandle(cv::Rect(0, 0, m_ConfHandle.cols - displacement, m_ConfHandle.rows))
-		.copyTo(m_fullDisparityMapConf(cv::Rect(displacement, 0, m_ConfHandle.cols - displacement, m_ConfHandle.rows)));
-	m_confidence.copyTo(m_ConfHandle);
-	m_ConfHandle(cv::Rect(0, 0, m_ConfHandle.cols - displacement, m_ConfHandle.rows))
-		.copyTo(m_confidence(cv::Rect(displacement, 0, m_ConfHandle.cols - displacement, m_ConfHandle.rows)));
-
-	// Create the mask
 	cv::add(m_confidence, -1, m_confidence);
 	m_confidence.setTo(0, m_maskConfidence);
 	m_confidence.setTo(1, m_confidence);
+
+	// Map displacement to account for the position of the artefacts 
+	// when the image is reconstructed with a wrong depth candidate
+	int displacement = int(float(m_winSize * m_fullDisparityMapConf.cols) / (m_fullDisparityMap.cols  * 2));
+	m_fullDisparityMapConf.copyTo(m_handle);
+	m_handle(cv::Rect(0, 0, m_handle.cols - displacement, m_handle.rows))
+		.copyTo(m_fullDisparityMapConf(cv::Rect(displacement, 0, m_handle.cols - displacement, m_handle.rows)));
+	m_confidence.copyTo(m_handle);
+	m_handle(cv::Rect(0, 0, m_handle.cols - displacement, m_handle.rows))
+		.copyTo(m_confidence(cv::Rect(displacement, 0, m_handle.cols - displacement, m_handle.rows)));
 
 	// Refine the confidence map using the edge structure in the restored image
 	cv::filter2D(m_reconsImgConf, m_edges1Conf, -1, m_kernelGrad1);
@@ -309,7 +308,7 @@ void DepthEstimator::filterDisparity()
 
 		// Outlier removal
 		cv::absdiff(m_fullDisparityMapConf, m_sparseDisparityMap, m_fullDisparityMapConf);
-		cv::compare(m_fullDisparityMapConf, 6, m_maskConfidence, cv::CMP_GT);
+		cv::compare(m_fullDisparityMapConf, 8, m_maskConfidence, cv::CMP_GT);
 		m_sparseDisparityMap.setTo(0, m_maskConfidence);
 	}
 	else

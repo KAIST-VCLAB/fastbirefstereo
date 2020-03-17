@@ -63,7 +63,7 @@ public:
 	DepthEstimator(cv::UMat const & tformInd, cv::UMat const & invInd,
 		float minZ, float maxZ, float disparityCoef, float tau,
 		float upsampling = 1.f, double scaleMask = 0.3,
-		int winSize = 61, unsigned char threshGrad = 220, unsigned char threshCost = 1);
+		int winSize = 61, unsigned char threshGrad = 190, unsigned char threshCost = 4);
 
 	/* @brief set a new uneven birefractive image and run the restoration algorithm
 	@param img uneven birefractive image (CV_8UC3)
@@ -160,7 +160,7 @@ private:
 	// Edges in the restored image for reliable area estimation
 	cv::UMat m_edges1Conf, m_edges2Conf, m_edgesGreyConf; 
 	// Handle for some conputations on the confidence
-	cv::UMat m_ConfHandle, m_maskConfidence;
+	cv::UMat m_handle, m_maskConfidence;
 
 	/// Disparity map filtering 
 	static const int m_filterSize = 21, m_filterRadius = m_filterSize / 2;
