@@ -2,7 +2,7 @@
 
 ![teaser](teaser.jpg)
 
-This is the code release for our paper [http://vclab.kaist.ac.kr/cvpr2020p2/](http://vclab.kaist.ac.kr/cvpr2020p2/). 
+This is the code release for our paper [Single-shot Monocular RGB-D Imaging using Uneven Double Refraction (CVPR 2020, Oral)](http://vclab.kaist.ac.kr/cvpr2020p2/). 
 In this work, we propose a method for monocular single-shot RGB-D imaging. 
 Instead of learning depth from single-image depth cues, we revisit double-refraction imaging using a birefractive 
 medium, measuring depth as the displacement of differently refracted images superimposed in a single capture. 
@@ -34,11 +34,10 @@ Note that `DepthEstimator::restoreImage` can be run separately for uneven superi
 ## Build rectification tables
 The subproject `precompute_rectification` shows the implementation of our dynamic-programming-based rectification for double refraction described in our paper.
 This rectification enables to simplify our algorithm: our simplified model becomes compatible with computationally efficient line scans.
-We obtained the birefractive baselines using Baek et al.'s model and code [https://github.com/KAIST-VCLAB/birefDepth-code](https://github.com/KAIST-VCLAB/birefDepth-code).
-The baselines are given as `f*n_po2e_im.*Ro` and `f*n_pe2pd_im.*Re` in their `test_system.m` script.
-The files `resources/b_e2d_1.exr`, `resources/b_e2d_2.exr` and `resources/b_o2d_1.exr`, `resources/b_o2d_2.exr` contains the precomputed birefractive baselines for our system parameters.
+The files `resources/b_e2d_1.exr`, `resources/b_e2d_2.exr` and `resources/b_o2d_1.exr`, `resources/b_o2d_2.exr` contain the precomputed birefractive baselines for our system parameters.
+They have been obtained using [Baek et al.'s birefractive model](http://vclab.kaist.ac.kr/siggraphasia2016p1/).
 This subproject uses them to produce the rectification tables `resources/tform_ind_new1.exr`, `resources/tform_ind_new2.exr` and `resources/inv_ind_new1.exr`, `resources/inv_ind_new2.exr` in the build folder.
-Our code detaches the depth dependency to create a depth-invariant baseline from the o-ray to the e-ray and 
+Our code removes the depth dependency to create a depth-invariant baseline from the o-ray to the e-ray and 
 generates the rectification tables to detach the baseline's spacial dependency. For more details on the model, please refer to our paper.
 
 ## Citation
