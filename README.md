@@ -2,7 +2,8 @@
 
 ![teaser](teaser.jpg)
 
-This is the code release for our paper [Single-shot Monocular RGB-D Imaging using Uneven Double Refraction (CVPR 2020, Oral)](http://vclab.kaist.ac.kr/cvpr2020p2/). 
+This repository contains the code for **[Single-shot Monocular RGB-D Imaging using Uneven Double Refraction (CVPR 2020, Oral)](http://vclab.kaist.ac.kr/cvpr2020p2/)**. 
+
 In this work, we propose a method for monocular single-shot RGB-D imaging. 
 Instead of learning depth from single-image depth cues, we revisit double-refraction imaging using a birefractive 
 medium, measuring depth as the displacement of differently refracted images superimposed in a single capture. 
