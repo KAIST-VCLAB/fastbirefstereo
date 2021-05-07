@@ -1,6 +1,6 @@
 # Single-shot Monocular RGB-D Imaging using Uneven Double Refraction
 
-![teaser](teaser.jpg)
+![teaser](teaser.svg)
 
 This repository contains the code for **[Single-shot Monocular RGB-D Imaging using Uneven Double Refraction (CVPR 2020, Oral)](http://vclab.kaist.ac.kr/cvpr2020p2/)**. 
 
